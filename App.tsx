@@ -7,20 +7,54 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  TextInput,
 } from "react-native";
 import { theme } from "./colors";
+import { useState } from "react";
 
 export default function App() {
+  const [working, setWorking] = useState(true);
+  const [text, setText] = useState("");
+  const travel = () => setWorking(false);
+  const work = () => setWorking(true);
+  const onChangeText = (payload: string) => setText(payload);
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.header}>
-        <TouchableOpacity activeOpacity={0}>
-          <Text style={styles.btnText}>Work</Text>
+        <TouchableOpacity onPress={work}>
+          <Text
+            style={{
+              ...styles.btnText,
+              color: working ? theme.white : theme.grey,
+            }}
+          >
+            Work
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("pressed")}>
-          <Text style={styles.btnText}>Travel</Text>
+        <TouchableOpacity onPress={travel}>
+          <Text
+            style={{
+              ...styles.btnText,
+              color: !working ? theme.white : theme.grey,
+            }}
+          >
+            Travel
+          </Text>
         </TouchableOpacity>
+      </View>
+      <View>
+        <TextInput
+          keyboardType="email-address"
+          placeholder={working ? "Add a To Do" : "Where do you want to go?"}
+          returnKeyLabel="메롱"
+          returnKeyType="send"
+          autoCorrect={false}
+          style={styles.input}
+          value={text}
+          onChangeText={onChangeText}
+        />
       </View>
     </View>
   );
@@ -40,6 +74,13 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 38,
     fontWeight: "600",
-    color: theme.grey,
+  },
+  input: {
+    backgroundColor: theme.white,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    marginTop: 20,
+    fontSize: 18,
   },
 });
